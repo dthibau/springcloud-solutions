@@ -1,6 +1,9 @@
+
 spring:
   profiles:
     active: swagger
+  application:
+    name: delivery-service
 
 management:
   endpoints:
@@ -18,7 +21,13 @@ management:
     health:
       show-details: always
 
-
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://annuaire:1111/eureka/
+  instance:
+    leaseRenewalIntervalInSeconds: 5   # DO NOT DO THIS IN PRODUCTION
+    
 ---
 spring:
   profiles: prod
