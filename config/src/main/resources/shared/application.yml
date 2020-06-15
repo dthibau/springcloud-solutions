@@ -19,9 +19,12 @@ management:
         - health
         - metrics
         - httptrace
-
-        
+        - refresh
   endpoint:
     health:
       show-details: always
+    
 
+logging:
+  level:
+    root: INFO
