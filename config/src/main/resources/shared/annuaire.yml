@@ -19,6 +19,8 @@ spring:
 eureka:
   instance:
     hostname: annuaire1
+    metadataMap:
+      zone: zone1
   client:
     serviceUrl:
       defaultZone: http://annuaire2:1112/eureka/
