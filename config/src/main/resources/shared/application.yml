@@ -1,0 +1,21 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://annuaire:1111/eureka/
+    healthcheck:
+      enabled: true
+       
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+        - env
+        - beans
+        - health
+        - metrics
+        - httptrace
+  endpoint:
+    health:
+      show-details: always
+    
