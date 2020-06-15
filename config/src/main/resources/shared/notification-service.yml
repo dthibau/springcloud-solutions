@@ -1,0 +1,8 @@
+server:
+  port: 9090
+
+notification:
+  host: localhost
+  port: 2525
+  username: toto
+  password: secret
