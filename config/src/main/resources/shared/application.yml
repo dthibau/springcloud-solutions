@@ -21,6 +21,8 @@ management:
         - httptrace
         - refresh
         - routes
+        - hystrix.stream
+        
   endpoint:
     health:
       show-details: always
