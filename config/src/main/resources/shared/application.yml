@@ -20,6 +20,7 @@ management:
         - metrics
         - httptrace
         - refresh
+        - routes
   endpoint:
     health:
       show-details: always

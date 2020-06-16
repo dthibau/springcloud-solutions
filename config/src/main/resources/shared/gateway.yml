@@ -1,0 +1,21 @@
+
+# HTTP Server
+server:
+  port: 8081   # HTTP (Tomcat) port
+  
+zuul:
+  ignoredServices: '*'
+  host:
+    connect-timeout-millis: 20000
+    socket-timeout-millis: 20000
+
+  routes:
+    accounts-service:
+        path: /api/accounts/**
+        stripPrefix: false
+        sensitiveHeaders: false
+
+    delivery-service:
+        path: /delivery-service/**
+        stripPrefix: true
+ 
