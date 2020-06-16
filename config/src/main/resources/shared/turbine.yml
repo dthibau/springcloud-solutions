@@ -1,0 +1,10 @@
+server:
+  port: 5555
+
+logging:
+  level:
+    com.netflix.discovery.shared: INFO 
+    
+turbine:
+  clusterNameExpression: new String("default")
+  appConfig: ACCOUNTS-SERVICE, GATEWAY
