@@ -10,6 +10,10 @@ zuul:
     socket-timeout-millis: 20000
 
   routes:
+    authorization:
+        path: /oauth/**
+        stripPrefix: false
+        sensitiveHeaders: true
     accounts-service:
         path: /api/accounts/**
         stripPrefix: false
