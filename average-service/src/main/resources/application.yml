@@ -1,0 +1,20 @@
+spring:
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: kafka
+          configuration:
+            auto:
+              offset:
+                reset: earliest
+      bindings:
+        positions-in:
+          destination: position
+          contentType: application/json
+          consumer:
+           startOffset: earliest         
+        averages-out:
+          destination: average
+          contentType: application/json          
+      
