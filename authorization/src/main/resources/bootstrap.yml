@@ -1,0 +1,16 @@
+jwtSecret: as466gf
+
+spring:
+  application:
+    name: authorization
+  cloud:
+    config:
+      uri: http://config:8888
+      fail-fast: true
+
+ 
+logging:
+  level:
+    org.springframework.security: DEBUG
+  
+  

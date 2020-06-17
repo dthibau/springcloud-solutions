@@ -1,0 +1,10 @@
+jwt:
+  secret: as466gf
+
+server:
+  port:
+    8989
+
+
+    
+

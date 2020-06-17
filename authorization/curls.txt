@@ -1,0 +1,7 @@
+# Accès direct au service d'authorization
+curl browser:secret@localhost:8989/oauth/token -d grant_type=password -d username=dthibau@wmmod.com -d password=secret
+
+curl service:secret@localhost:8989/oauth/token -d grant_type=client_credentials 
+
+# Accès via le proxy
+curl browser:secret@localhost:8081/oauth/token -d grant_type=password -d username=dthibau@wmmod.com -d password=secret
