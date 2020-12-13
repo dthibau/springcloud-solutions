@@ -1,0 +1,24 @@
+server:
+  port: 2222
+
+spring:
+  jpa:
+    show-sql: true
+    
+    
+spring.cloud.loadbalancer.ribbon.enabled: false
+
+management.health.circuitbreakers.enabled: true
+management.health.ratelimiters.enabled: true
+
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      registerHealthIndicator: true
+
+
+resilience4j.ratelimiter:
+  configs:
+    default:
+      registerHealthIndicator: true
