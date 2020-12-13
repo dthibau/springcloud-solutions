@@ -4,6 +4,7 @@ import org.formation.model.Order;
 import org.formation.model.OrderRepository;
 import org.formation.service.dependencies.Courriel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -19,6 +20,9 @@ public class OrderService {
 	@Autowired
 	RestTemplate restTemplate;
 	
+	@Autowired
+	private CircuitBreakerFactory<?, ?> cbFactory;
+	
 	public Order processOrder(Order order ) {
 		
 		_sendMail(order);
@@ -30,9 +34,9 @@ public class OrderService {
 		Courriel c = Courriel.builder().
 				         to(order.getClient().getEmail()).text("Féliciations pour votre nouvelle commande").subject("Nouvelle commande").build();
 		
-		String result = restTemplate.postForObject("http://notification-service/sendSimple", c, String.class); 
-	
+		String result = cbFactory.create("sendsimple").run(() -> restTemplate.postForObject("http://notification-service/sendSimple", c, String.class), throwable -> { System.out.println("FALLBACK"); return "fallback"; });
+		
 		log.info("Result form notification Service " + result);
-	
+
 	}
 }

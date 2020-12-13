@@ -15,7 +15,7 @@ public class ClientConfiguration {
 
 	@Bean
 	@LoadBalanced
-	RestTemplate restTemplate() {
-		return builder.build();
+	RestTemplate notificationClient() {
+		return builder.rootUri("http://notification-service").build();
 	}
 }
