@@ -17,7 +17,7 @@
 
 	<properties>
 		<java.version>17</java.version>
-		<jacoco-maven-plugin.version>0.8.4</jacoco-maven-plugin.version>
+		<jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
 		<sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
 		<spring-cloud.version>2022.0.4</spring-cloud.version>
 	</properties>
@@ -66,6 +66,15 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-bootstrap</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-contract-verifier</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
@@ -130,6 +139,19 @@
 				<groupId>org.sonarsource.scanner.maven</groupId>
 				<artifactId>sonar-maven-plugin</artifactId>
 				<version>${sonar-maven-plugin.version}</version>
+			</plugin>
+			<!-- Generate test classes for SC Contract -->
+			<plugin>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-contract-maven-plugin</artifactId>
+				<version>4.0.4</version>
+				<extensions>true</extensions>
+				<configuration>
+					<baseClassForTests>
+						org.formation.BaseTestClass
+					</baseClassForTests>
+					<testFramework>JUNIT5</testFramework>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
