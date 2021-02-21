@@ -23,7 +23,10 @@ public class OrderService {
 	public Order processOrder(Order order ) {
 		
 		_sendMail(order);
-		return orderRepository.save(order);
+		Order ret = orderRepository.save(order);
+		_startDelivery(ret.getId());
+		
+		return ret;
 	}
 	
 	private void _sendMail(Order order) {
@@ -32,6 +35,13 @@ public class OrderService {
 				         to(order.getClient().getEmail()).text("Féliciations pour votre nouvelle commande").subject("Nouvelle commande").build();
 		
 		cbFactory.create("sendsimple").run(() -> restTemplate.postForObject("http://notification-service/sendSimple", c, String.class), throwable -> { System.out.println("FALLBACK"); return "fallback"; });
+		
+	}
+	
+	private void _startDelivery(Long orderId) {
+		
+		
+		cbFactory.create("startDelivery").run(() -> restTemplate.postForObject("http://delivery-service/api/livraison", orderId, String.class), throwable -> { System.out.println("FALLBACK"); return "fallback"; });
 		
 	}
 }
