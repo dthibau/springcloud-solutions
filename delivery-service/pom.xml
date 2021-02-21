@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.2.4.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.formation</groupId>
 	<artifactId>delivery-service</artifactId>
@@ -67,111 +68,129 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-config</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>
+				spring-cloud-starter-contract-verifier
+			</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<resources>
-     		<resource>
-       			<directory>src/main/resources</directory>
-     		</resource>
-     		<resource>
-       			<directory>src/main/docker</directory>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<directory>src/main/docker</directory>
 				<filtering>true</filtering>
-     		</resource>
-   		</resources>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-                    <executable>true</executable>
-                    <fork>true</fork>
-                    <!--
-                    Enable the line below to have remote debugging of your application on port 5005
-                    <jvmArguments>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005</jvmArguments>
-                    -->
+					<executable>true</executable>
+					<fork>true</fork>
+					<!-- Enable the line below to have remote debugging of your application 
+						on port 5005 <jvmArguments>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005</jvmArguments> -->
 					<executions>
-				  		<execution>
-				    		<goals>
-                      			<goal>build-info</goal>
-                    		</goals>
-			      		</execution>
+						<execution>
+							<goals>
+								<goal>build-info</goal>
+							</goals>
+						</execution>
 					</executions>
-                </configuration>
+				</configuration>
 			</plugin>
-			 <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${jacoco-maven-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>pre-unit-tests</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <!-- Ensures that the code coverage report for unit tests is created after unit tests have been run -->
-                    <execution>
-                        <id>post-unit-test</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.sonarsource.scanner.maven</groupId>
-                <artifactId>sonar-maven-plugin</artifactId>
-                <version>${sonar-maven-plugin.version}</version>
-            </plugin>
-		</plugins>
-	</build>
-    <distributionManagement>
-        <snapshotRepository>
-            <id>nexus</id>
-            <url>http://localhost:8081/repository/maven-snapshots/</url>
-        </snapshotRepository>
-        <repository>
-            <id>nexus</id>
-            <url>http://localhost:8081/repository/maven-releases/</url>
-        </repository>
-    </distributionManagement>
-	<profiles>
-	  <profile>
-	    <id>prod</id>
-		<dependencies>
-			<dependency>
-				<groupId>org.postgresql</groupId>
-				<artifactId>postgresql</artifactId>
-				<scope>runtime</scope>
-			</dependency>
-		  	<dependency>
-    	    	<groupId>pl.project13.maven</groupId>
-            	<artifactId>git-commit-id-plugin</artifactId>
-				<version>4.0.0</version>
-		  	</dependency>
-		</dependencies>
-		<build>
-		  <plugins>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-                    <executable>true</executable>
-                    <fork>true</fork>
-                </configuration>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco-maven-plugin.version}</version>
 				<executions>
-				  <execution>
-				    <goals>
-                      <goal>build-info</goal>
-                    </goals>
-			      </execution>
+					<execution>
+						<id>pre-unit-tests</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<!-- Ensures that the code coverage report for unit tests is created 
+						after unit tests have been run -->
+					<execution>
+						<id>post-unit-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
 				</executions>
 			</plugin>
-		  </plugins>
-		</build>
-	  </profile>
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>${sonar-maven-plugin.version}</version>
+			</plugin>
+			<!-- Generate test classes for SC Contract -->
+			<plugin>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-contract-maven-plugin</artifactId>
+				<version>2.1.1.RELEASE</version>
+				<extensions>true</extensions>
+				<configuration>
+					<baseClassForTests>
+						org.formation.BaseTestClass
+					</baseClassForTests>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<distributionManagement>
+		<snapshotRepository>
+			<id>nexus</id>
+			<url>http://localhost:8081/repository/maven-snapshots/</url>
+		</snapshotRepository>
+		<repository>
+			<id>nexus</id>
+			<url>http://localhost:8081/repository/maven-releases/</url>
+		</repository>
+	</distributionManagement>
+	<profiles>
+		<profile>
+			<id>prod</id>
+			<dependencies>
+				<dependency>
+					<groupId>org.postgresql</groupId>
+					<artifactId>postgresql</artifactId>
+					<scope>runtime</scope>
+				</dependency>
+				<dependency>
+					<groupId>pl.project13.maven</groupId>
+					<artifactId>git-commit-id-plugin</artifactId>
+					<version>4.0.0</version>
+				</dependency>
+			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<configuration>
+							<executable>true</executable>
+							<fork>true</fork>
+						</configuration>
+						<executions>
+							<execution>
+								<goals>
+									<goal>build-info</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 
 	<dependencyManagement>
