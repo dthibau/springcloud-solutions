@@ -18,30 +18,41 @@ public class OrderService {
 	RestTemplate restTemplate;
 	
 	@Autowired
-	private CircuitBreakerFactory cbFactory;
+	CircuitBreakerFactory cbFactory;
+	
 	
 	public Order processOrder(Order order ) {
 		
-		_sendMail(order);
+		_sendCourriel(order);
+		
 		Order ret = orderRepository.save(order);
-		_startDelivery(ret.getId());
+		
+		_startDelivery(order);
 		
 		return ret;
 	}
 	
-	private void _sendMail(Order order) {
-		
-		Courriel c = Courriel.builder().
-				         to(order.getClient().getEmail()).text("Féliciations pour votre nouvelle commande").subject("Nouvelle commande").build();
-		
-		cbFactory.create("sendsimple").run(() -> restTemplate.postForObject("http://notification-service/sendSimple", c, String.class), throwable -> { System.out.println("FALLBACK"); return "fallback"; });
-		
+	private void _sendCourriel(Order order) {
+		Courriel c = Courriel.builder().to(order.getClient().getEmail()).text("Féliciations pour votre nouvelle commande").subject("Nouvelle commande").build();
+					
+		String status = cbFactory.create("notification").run(
+				() -> { 
+					System.out.println("Appels");
+					return restTemplate.postForObject("http://notification-service/sendSimple", c, String.class); 
+				},
+				throwable -> "fallback");
+				
+		System.out.println(status);
 	}
 	
-	private void _startDelivery(Long orderId) {
-		
-		
-		cbFactory.create("startDelivery").run(() -> restTemplate.postForObject("http://delivery-service/api/livraison", orderId, String.class), throwable -> { System.out.println("FALLBACK"); return "fallback"; });
-		
-	}
+	private void _startDelivery(Order order) {
+					
+		String status = cbFactory.create("delivery").run(
+				() -> { 
+					return restTemplate.postForObject("http://delivery-service/api/livraison?noCommande="+order.getId(), order.getId(), String.class); 
+				},
+				throwable -> "fallback");
+				
+		System.out.println(status);
+	}	
 }

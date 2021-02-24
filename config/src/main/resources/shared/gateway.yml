@@ -11,9 +11,9 @@ zuul:
 
   routes:
     authorization:
-        path: /oauth/**
-        stripPrefix: false
-        sensitiveHeaders: true
+         path: /oauth/**
+         stripPrefix: false
+         sensitiveHeaders: true
     accounts-service:
         path: /api/accounts/**
         stripPrefix: false
@@ -23,3 +23,7 @@ zuul:
         path: /delivery-service/**
         stripPrefix: true
  
+    order-service:
+        path: /order-service/**
+        stripPrefix: true
+        sensitiveHeaders: true

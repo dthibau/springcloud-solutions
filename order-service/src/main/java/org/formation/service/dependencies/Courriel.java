@@ -6,5 +6,8 @@ import lombok.Data;
 @Data
 @Builder
 public class Courriel {
-	private String to, subject, text;
+
+	private String to;
+	private String subject;
+	private String text;
 }
