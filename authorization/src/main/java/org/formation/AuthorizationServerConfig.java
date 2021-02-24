@@ -18,15 +18,14 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
-	static final String BROWSER_ID = "browser";
+	static final String CLIEN_ID = "client";
 	static final String CLIENT_SECRET = "$2a$04$54PNEzvW7t8n14wmLEJukepUg3Qx8HJ35H2b8hUo2F1oCgGf5589W";
-	static final String SERVICE_ID = "service";
 	static final String GRANT_TYPE_PASSWORD = "password";
 	static final String AUTHORIZATION_CODE = "authorization_code";
     static final String REFRESH_TOKEN = "refresh_token";
-    static final String CLIENT_CREDENTIALS = "client_credentials";
-	static final String SCOPE_UI = "ui";
-	static final String SCOPE_SERVICE = "service";
+    static final String IMPLICIT = "implicit";
+	static final String SCOPE_READ = "read";
+	static final String SCOPE_WRITE = "write";
     static final String TRUST = "trust";
 	static final int ACCESS_TOKEN_VALIDITY_SECONDS = 1*60*60;
     static final int FREFRESH_TOKEN_VALIDITY_SECONDS = 6*60*60;
@@ -55,17 +54,17 @@ JwtConfigurationProperties jwtConfig;
 
 		configurer
 				.inMemory()
-				.withClient(BROWSER_ID)
+				.withClient(CLIEN_ID)
 				.secret(CLIENT_SECRET)
-				.authorizedGrantTypes(GRANT_TYPE_PASSWORD, REFRESH_TOKEN)
-				.scopes(SCOPE_UI)
+				.authorizedGrantTypes(GRANT_TYPE_PASSWORD, AUTHORIZATION_CODE, REFRESH_TOKEN, IMPLICIT )
+				.scopes(SCOPE_READ, SCOPE_WRITE, TRUST)
 				.accessTokenValiditySeconds(ACCESS_TOKEN_VALIDITY_SECONDS).
 				refreshTokenValiditySeconds(FREFRESH_TOKEN_VALIDITY_SECONDS)
 				.and()
-				.withClient(SERVICE_ID)
+				.withClient("client2")
 				.secret(CLIENT_SECRET)
-				.authorizedGrantTypes(CLIENT_CREDENTIALS)
-				.scopes(SCOPE_SERVICE)
+				.authorizedGrantTypes(GRANT_TYPE_PASSWORD, AUTHORIZATION_CODE, REFRESH_TOKEN, IMPLICIT )
+				.scopes(SCOPE_READ)
 				.accessTokenValiditySeconds(ACCESS_TOKEN_VALIDITY_SECONDS).
 				refreshTokenValiditySeconds(FREFRESH_TOKEN_VALIDITY_SECONDS);
 
