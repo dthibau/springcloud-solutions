@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: delivery-service-${BRANCH_NAME}
+  name: delivery-service
   namespace: default
 spec:
   replicas: 3
   selector:
     matchLabels:
-      name: delivery-service-${BRANCH_NAME}
+      name: delivery-service
   template:
     metadata:
       labels:
-        name: delivery-service-${BRANCH_NAME}
+        name: delivery-service
     spec:
       containers:
-      - name: delivery-service-${BRANCH_NAME}
+      - name: delivery-service
         env:
           - name: SPRING_JPA_SHOW-SQL
             value: "true"
@@ -23,24 +23,24 @@ spec:
           - name: POSTGRES_USER
             valueFrom:
               configMapKeyRef:
-                name: postgres-config-${BRANCH_NAME}
+                name: postgres-config
                 key: POSTGRES_USER
           - name: POSTGRES_PASSWORD
             valueFrom:
               configMapKeyRef:
-                name: postgres-config-${BRANCH_NAME}
+                name: postgres-config
                 key: POSTGRES_PASSWORD
           - name: POSTGRES_DB
             valueFrom:
               configMapKeyRef:
-                name: postgres-config-${BRANCH_NAME}
+                name: postgres-config
                 key: POSTGRES_DB
           - name: POSTGRES_SERVICE
             valueFrom:
               configMapKeyRef:
-                name: postgres-config-${BRANCH_NAME}
+                name: postgres-config
                 key: POSTGRES_SERVICE
-        image: ${IMAGE}
+        image: dthibau/delivery-service:0.0.8
         imagePullPolicy: Always
       imagePullSecrets:
         - name: regcred

@@ -2,26 +2,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres-service-${BRANCH_NAME}
+  name: postgres-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: postgres-${BRANCH_NAME}
+      app: postgres
   template:
     metadata:
       labels:
-        app: postgres-${BRANCH_NAME}
+        app: postgres
     spec:
       containers:
-        - name: postgres-${BRANCH_NAME}
+        - name: postgres
           image: postgres:9.6
           imagePullPolicy: "IfNotPresent"
           ports:
             - containerPort: 5432
           envFrom:
             - configMapRef:
-                name: postgres-config-${BRANCH_NAME}
+                name: postgres-config
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               name: postgredb
@@ -37,12 +37,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgres-service-${BRANCH_NAME}
+  name: postgres-service
   labels:
-    app: postgres-${BRANCH_NAME}
+    app: postgres
 spec:
   type: ClusterIP
   ports:
    - port: 5432
   selector:
-   app: postgres-${BRANCH_NAME}            
+   app: postgres            
