@@ -1,38 +1,11 @@
+
 spring:
-  profiles:
-    active: swagger
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include:
-        - env
-        - health
-        - metrics
-        - httpTrace
-        - mappings
-        - info
-        - loggers
-  endpoint:
-    health:
-      show-details: always
-
-
----
-spring:
-  profiles: prod
-
-  datasource:
-    url: jdbc:postgresql://${POSTGRES_SERVICE}/${POSTGRES_DB}
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
-    hikari:
-      maximum-pool-size: 20
-      connection-timeout: 2000
-
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-
+  application:
+    name: delivery-service
+    
+  cloud:
+    config:
+      uri: http://config:8888
+      fail-fast: true
+      
+      

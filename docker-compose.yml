@@ -1,0 +1,88 @@
+version: '2.2'
+services:
+  config:
+    build: ./config/
+    healthcheck:
+        test: curl -f http://localhost:8888/proxy/default && echo 'cool, it works'
+        interval: 10s
+        timeout: 10s
+        retries: 5
+    networks:
+     - back
+    ports:
+     - "8888:8888"
+  annuaire:
+    build: ./annuaire/
+    networks:
+     - back
+    ports:
+     - "1111:1111"
+    depends_on: 
+      config:
+        condition: service_healthy
+  authorization:
+    build: ./authorization/
+    networks:
+     - back
+    restart: always
+    depends_on: 
+      config:
+        condition: service_healthy
+  delivery-service:
+    build: ./delivery-service/
+    networks:
+     - back
+    restart: always
+    depends_on: 
+      config:
+        condition: service_healthy
+  notification-service:
+    build: ./notification-service/
+    networks:
+     - back
+    restart: always
+    depends_on: 
+      config:
+        condition: service_healthy
+  order-service:
+    build: ./order-service/
+    networks:
+      - back
+    restart: always
+    depends_on: 
+      config:
+        condition: service_healthy
+  turbine:
+    build: ./turbine/
+    networks:
+      - back
+    restart: always
+    depends_on: 
+      config:
+        condition: service_healthy
+    ports:
+     - "5555:5555"
+  zipkin:
+    image: openzipkin/zipkin
+    networks:
+      - back
+  fake-smtp:
+    image: dthibau/fake-smtp:1.0
+    networks:
+      - back
+  gateway:
+    build: ./gateway/
+    networks:
+      - front
+      - back
+    ports:
+      - 8081:8081
+    restart: always
+    depends_on: 
+      config:
+        condition: service_healthy
+
+
+networks:
+  back:
+  front:
