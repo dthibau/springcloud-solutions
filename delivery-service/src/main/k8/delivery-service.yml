@@ -4,7 +4,7 @@ metadata:
   name: delivery-service-${BRANCH_NAME}
   namespace: default
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       name: delivery-service-${BRANCH_NAME}
@@ -16,6 +16,8 @@ spec:
       containers:
       - name: delivery-service-${BRANCH_NAME}
         env:
+          - name: SPRING_JPA_SHOW-SQL
+            value: "true"
           - name: SPRING_PROFILES_ACTIVE
             value: prod,swagger
           - name: POSTGRES_USER
