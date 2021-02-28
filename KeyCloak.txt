@@ -1,0 +1,14 @@
+docker run -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin -p 8089:8080 --name keycloak jboss/keycloak
+
+Create Users ...
+
+Get Token 
+curl -XPOST http://localhost:8089/auth/realms/StoreRealm/protocol/openid-connect/token -d grant_type=password -d client_id=store-app -d client_secret=df01b0b3-af56-4503-aa3c-86513e975fcc -d username=user -d password=secret
+
+RefreshToken
+curl -XPOST http://localhost:8089/auth/realms/StoreRealm/protocol/openid-connect/token -d grant_type=refresh_token -d client_id=store-app -d client_secret=df01b0b3-af56-4503-aa3c-86513e975fcc -d refresh_token=eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIwYjIwZDU3Ni03MDQyLTRhYTctYjlmZi05YzlhY2NhYTdkMGEifQ.eyJleHAiOjE2MTQ0NDgxODUsImlhdCI6MTYxNDQ0NjM4NSwianRpIjoiNmZiNWMzMWItMTI0OS00MWUyLWEwYzUtMzIwYzk0Yzc2OWQ5IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDg5L2F1dGgvcmVhbG1zL1N0b3JlUmVhbG0iLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjgwODkvYXV0aC9yZWFsbXMvU3RvcmVSZWFsbSIsInN1YiI6IjZlZjAzZDQ4LTUzZDUtNDhkNi1hNzdjLWNlYWU0YTI0YTMyYSIsInR5cCI6IlJlZnJlc2giLCJhenAiOiJzdG9yZS1hcHAiLCJzZXNzaW9uX3N0YXRlIjoiOTc1ZjI5NjMtM2NlOS00YWNjLTgyMjgtZGRkZTgyNmQ3MTIzIiwic2NvcGUiOiJlbWFpbCBwcm9maWxlIn0.rOc6b90grdRDyxJo66-fjfCZABJcwz7rX3ur0YtcOQc
+{
+    'client_id': 'your_client_id',
+    'refresh_token': refresh_token_from_previous_request,
+    'grant_type': 'refresh_token'
+}
