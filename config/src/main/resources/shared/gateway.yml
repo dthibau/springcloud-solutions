@@ -15,7 +15,7 @@ zuul:
         stripPrefix: false
         sensitiveHeaders: true
         url: http://localhost:8089/
-    accounts-service:
+    account-service:
         path: /api/accounts/**
         stripPrefix: false
         sensitiveHeaders: false

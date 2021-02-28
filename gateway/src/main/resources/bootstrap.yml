@@ -32,7 +32,10 @@ spring:
             client-secret: df01b0b3-af56-4503-aa3c-86513e975fcc
             authorization-grant-type: authorization_code
             redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"
-    
+
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8089/auth/realms/StoreRealm    
 logging:
   level:
     org.springframework.security: debug
