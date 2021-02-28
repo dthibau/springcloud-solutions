@@ -24,3 +24,9 @@ zuul:
         path: /delivery-service/**
         stripPrefix: true
  
+    order-service:
+        path: /order-service/**
+        stripPrefix: true
+        sensitiveHeaders: true
+
+ 
