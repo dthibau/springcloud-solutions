@@ -10,6 +10,11 @@ zuul:
     socket-timeout-millis: 20000
 
   routes:
+    keycloak:
+        path: /auth/**
+        stripPrefix: false
+        sensitiveHeaders: true
+        url: http://localhost:8089/
     accounts-service:
         path: /api/accounts/**
         stripPrefix: false
