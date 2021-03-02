@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: annuaire
+    
+  cloud:
+    config:
+      uri:
+      - http://config:8888
+      fail-fast: true
