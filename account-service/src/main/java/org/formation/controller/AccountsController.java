@@ -1,28 +1,25 @@
 package org.formation.controller;
 
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
+import org.formation.notification.Courriel;
+import org.formation.notification.NotificationClient;
 import org.formation.repository.Account;
 import org.formation.repository.AccountRepository;
 import org.formation.repository.Role;
 import org.formation.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import jakarta.validation.Valid;
+import lombok.extern.java.Log;
 
 /**
  * A RESTFul controller for accessing Account information.
@@ -31,22 +28,17 @@ import jakarta.validation.Valid;
  */
 @RestController
 @RequestMapping("/api/accounts")
+@Log
 public class AccountsController {
 
 	protected Logger logger = Logger.getLogger(AccountsController.class.getName());
 	private final AccountRepository accountRepository;
 	private final RoleRepository roleRepository;
 
-	private int roundRobin = 0;
 
 	@Autowired
-	DiscoveryClient discoveryClient;
-
-	@Autowired
-	RestTemplateBuilder restBuilder;
-
-	@Autowired
-	CircuitBreakerFactory<?, ?> cbFactory;
+	NotificationClient notificationClient;
+	
 
 	public AccountsController(AccountRepository accountRepository, RoleRepository roleRepository) {
 		this.accountRepository = accountRepository;
@@ -114,26 +106,13 @@ public class AccountsController {
 		}
 		account = accountRepository.save(account);
 		
-		logger.info("Notification is " + sendMail(account));
 
+		Courriel c = Courriel.builder().to(account.getEmail()).subject("Bienvenue").text("Félicitation vous êtes enregistré").build();
+		
+		log.info(notificationClient.sendSimple(c));
+		
 		return account;
 	}
 
-	public String sendMail(Account account) {
-		Map<String, String> map = new HashMap<>();
-		map.put("to", account.getEmail());
-		map.put("subject", "Inscription");
-		map.put("text", "Bienvenue");
 
-		List<ServiceInstance> instances = discoveryClient.getInstances("notification-service");
-		ServiceInstance instance = instances.get(roundRobin % instances.size());
-		String url = "http://" + instance.getHost() + ":" + instance.getPort();
-		roundRobin++;
-		RestTemplate restTemplate = restBuilder.rootUri(url).build();
-		
-
-		return cbFactory.create("notification").run(
-				() -> restTemplate.postForObject("/sendSimple", map, String.class),
-				throwable -> "fallback");
-	}
 }
