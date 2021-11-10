@@ -5,4 +5,7 @@ spring:
   jpa:
     show-sql: false
     
-    
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
