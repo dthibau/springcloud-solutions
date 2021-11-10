@@ -1,30 +1,23 @@
 package org.formation.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
-import javax.swing.Spring;
 import javax.validation.Valid;
 
+import org.formation.notification.Courriel;
+import org.formation.notification.NotificationClient;
 import org.formation.repository.Account;
 import org.formation.repository.AccountRepository;
 import org.formation.repository.Role;
 import org.formation.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * A RESTFul controller for accessing Account information.
@@ -39,6 +32,9 @@ public class AccountsController {
 	private final AccountRepository accountRepository;
 	private final RoleRepository roleRepository;
 
+	@Autowired
+	NotificationClient notificationClient;
+	
 
 	public AccountsController(AccountRepository accountRepository, RoleRepository roleRepository) {
 		this.accountRepository = accountRepository;
@@ -105,6 +101,10 @@ public class AccountsController {
 			account.addRole(roleRepository.findByName(Role.CUSTOMER));
 		}
 		account = accountRepository.save(account);
+		
+		Courriel c = Courriel.builder().to(account.getEmail()).subject("Bienvenue").text("Félicitation vous êtes enregistré").build();
+		
+		notificationClient.sendSimple(c);
 		
 		return account;
 	}
