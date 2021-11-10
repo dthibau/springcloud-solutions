@@ -1,0 +1,28 @@
+server:
+  port: 8000
+  
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: route-order
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path= /order/**
+          filters:
+            - RewritePath=/order/?(?<remaining>.*), /$\{remaining}
+        - id: route-delivery
+          uri: lb://DELIVERY-SERVICE
+          predicates:
+            - Path= /delivery/**
+          filters:
+            - RewritePath=/delivery/?(?<remaining>.*), /$\{remaining}
+        - id: route-account
+          uri: lb://ACCOUNT-SERVICE
+          predicates:
+            - Path= /account/**
+          filters:
+            - RewritePath=/account/?(?<remaining>.*), /$\{remaining}
+      discovery:
+        locator:
+          enabled: false
