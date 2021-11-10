@@ -1,7 +1,7 @@
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://annuaire1:1111/eureka/,http://annuaire2:1112/eureka/
+      defaultZone: http://annuaire:1111/eureka/
     healthcheck:
       enabled: true
     preferSameZoneEureka: true
