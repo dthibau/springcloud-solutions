@@ -11,4 +11,7 @@ spring:
 #        enabled: false
         
 
-   
+management:
+  endpoint:
+    prometheus:
+      enabled: true   

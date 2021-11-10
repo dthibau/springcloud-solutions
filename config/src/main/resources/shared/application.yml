@@ -21,7 +21,8 @@ management:
         - metrics
         - httptrace
         - refresh
-
+        - gateway
+        - prometheus
   endpoint:
     health:
       show-details: always
