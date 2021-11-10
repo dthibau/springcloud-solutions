@@ -14,12 +14,14 @@ management:
     web:
       exposure:
         include:
+        - gateway
         - env
         - beans
         - health
         - metrics
         - httptrace
         - refresh
+
   endpoint:
     health:
       show-details: always
