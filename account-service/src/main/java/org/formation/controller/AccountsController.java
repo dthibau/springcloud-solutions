@@ -39,16 +39,6 @@ public class AccountsController {
 	private final AccountRepository accountRepository;
 	private final RoleRepository roleRepository;
 
-	private int roundRobin = 0;
-
-	@Autowired
-	DiscoveryClient discoveryClient;
-
-	@Autowired
-	RestTemplateBuilder restBuilder;
-
-	@Autowired
-	CircuitBreakerFactory cbFactory;
 
 	public AccountsController(AccountRepository accountRepository, RoleRepository roleRepository) {
 		this.accountRepository = accountRepository;
@@ -116,26 +106,8 @@ public class AccountsController {
 		}
 		account = accountRepository.save(account);
 		
-		logger.info("Notification is " + sendMail(account));
-
 		return account;
 	}
 
-	public String sendMail(Account account) {
-		Map<String, String> map = new HashMap<>();
-		map.put("to", account.getEmail());
-		map.put("subject", "Inscription");
-		map.put("text", "Bienvenue");
 
-		List<ServiceInstance> instances = discoveryClient.getInstances("notification-service");
-		ServiceInstance instance = instances.get(roundRobin % instances.size());
-		String url = "http://" + instance.getHost() + ":" + instance.getPort();
-		roundRobin++;
-		RestTemplate restTemplate = restBuilder.rootUri(url).build();
-		
-
-		return cbFactory.create("notification").run(
-				() -> restTemplate.postForObject("/sendSimple", map, String.class),
-				throwable -> "fallback");
-	}
 }
