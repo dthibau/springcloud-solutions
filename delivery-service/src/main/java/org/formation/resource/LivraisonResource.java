@@ -1,7 +1,6 @@
 package org.formation.resource;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -10,6 +9,7 @@ import org.formation.model.Livraison;
 import org.formation.model.Status;
 import org.formation.model.Trace;
 import org.formation.repository.LivraisonRepository;
+import org.formation.service.LivraisonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +29,10 @@ public class LivraisonResource {
 
 	@Autowired
 	LivraisonRepository livraisonRepository;
+	
+	@Autowired
+	LivraisonService livraisonService;
+
 
 	@GetMapping
 	public List<Livraison> findAll() {
@@ -64,15 +68,7 @@ public class LivraisonResource {
 	@PostMapping
 	public ResponseEntity<Livraison> createLivraison(@RequestParam String noCommande) {
 
-		Livraison livraison = new Livraison();
-		livraison.setNoCommande(noCommande);
-		Trace trace = new Trace();
-		trace.setNewStatus(Status.CREE);
-		trace.setDate(Instant.now());
-		livraison.addTrace(trace);
-		livraison.setCreationDate(trace.getDate());
-		livraison.setStatus(Status.CREE);
-		livraison = livraisonRepository.save(livraison);
+		Livraison livraison = livraisonService.createLivraison(noCommande);
 
 		return new ResponseEntity<>(livraison, HttpStatus.CREATED);
 

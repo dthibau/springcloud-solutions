@@ -1,5 +1,5 @@
 server:
-  port: 9092
+  port: 9080
 
 notification:
   host: localhost
@@ -15,4 +15,4 @@ spring:
       - replica
     
 server:
-  port: 9093
+  port: 9081

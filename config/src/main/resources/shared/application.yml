@@ -1,3 +1,14 @@
+spring:
+  kafka:
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer    
+    consumer:
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer   
+      properties:
+        spring.json.trusted.packages: '*'
+    bootstrap-servers:
+    - kafka:9092 
+
 eureka:
   client:
     serviceUrl:
@@ -32,6 +43,12 @@ management:
     sampling:
       probability: 1.0    
 
+    
+app:
+  channel:
+    account: account
+    order: order
+    
 logging:
   level:
     root: info

@@ -20,3 +20,4 @@ management:
         - beans
         - health
         - mappings
+        

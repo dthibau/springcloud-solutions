@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.Data;
 
 @Entity
@@ -26,10 +27,19 @@ public class Order {
 	
 	private float discount;
 	
+	private String status;
+	
 	@ManyToOne
 	private Client client;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
 	List<OrderItem> orderItems = new ArrayList<>();
 	
+	
+	@Transient
+	public Float getAmount() {
+		float total = orderItems.stream().map(oi -> oi.getQuantity()*oi.getPrice()).reduce(0f,(a,b) -> a+b);
+		return total-total*discount;
+		
+	}
 }
