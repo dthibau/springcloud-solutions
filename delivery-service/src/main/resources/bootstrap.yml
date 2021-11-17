@@ -8,3 +8,4 @@ spring:
       - http://config:8888
       fail-fast: true
 
+spring.kafka.listener.missing-topics-fatal: false

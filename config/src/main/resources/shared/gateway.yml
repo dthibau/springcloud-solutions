@@ -5,6 +5,13 @@ spring:
   cloud:
     gateway:
       routes:
+        - id: keycloak
+          uri: http://localhost:8089/
+          predicates:
+            - Path= /auth/**
+          filters:
+            - RewritePath=/auth/?(?<remaining>.*), /$\{remaining}
+
         - id: route-order
           uri: lb://ORDER-SERVICE
           predicates:
