@@ -54,7 +54,7 @@ public class OrderService {
 									.text("Voici les conditions de retrait de la commande").build();
 		
 //		log.info(_sendMail(c));
-		log.info("" + _startDelivery(order.getId()));
+//		log.info("" + _startDelivery(order.getId()));
 		
 		PaymentRequest pr = PaymentRequest.builder().orderId(order.getId()).clientId(order.getClient().getId())
 				.amount(order.getAmount()).build();

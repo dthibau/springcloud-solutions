@@ -52,4 +52,4 @@ app:
 logging:
   level:
     root: info
-    '[org.springframework.cloud]': debug
+    '[org.springframework.security]': debug

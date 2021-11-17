@@ -12,8 +12,6 @@ spring:
         positions-in:
           destination: position
           contentType: application/json
-          consumer:
-           startOffset: earliest         
         averages-out:
           destination: average
           contentType: application/json          
