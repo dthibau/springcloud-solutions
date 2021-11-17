@@ -5,7 +5,7 @@
 
 	<groupId>org.formation</groupId>
 	<version>0.0.1-SNAPSHOT</version>
-	<artifactId>accounts-service</artifactId>
+	<artifactId>account-service</artifactId>
 	<packaging>jar</packaging>
 
 	<parent>

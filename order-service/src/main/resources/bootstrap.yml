@@ -10,11 +10,7 @@ spring:
       ribbon:
         enabled: false
         
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost:8089/auth/realms/StoreRealm 
+
 management:
   endpoint:
     prometheus:

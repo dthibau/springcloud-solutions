@@ -1,0 +1,100 @@
+version: '2.2'
+services:
+  config:
+    build: ./config/
+    healthcheck:
+        test: curl -f http://localhost:8888/proxy/default && echo 'cool, it works'
+        interval: 10s
+        timeout: 10s
+        retries: 5
+    networks:
+     - back
+    ports:
+     - "8888:8888"
+  annuaire:
+    build: ./annuaire/
+    networks:
+     - back
+    ports:
+     - "1111:1111"
+    depends_on: 
+      config:
+        condition: service_healthy
+  account-service:
+    build: ./account-service/
+    networks:
+     - back
+    restart: always
+    depends_on: 
+      config:
+        condition: service_healthy
+  delivery-service:
+    build: ./delivery-service/
+    networks:
+     - back
+    restart: always
+    depends_on: 
+      config:
+        condition: service_healthy
+  notification-service:
+    build: ./notification-service/
+    networks:
+     - back
+    restart: always
+    depends_on: 
+      config:
+        condition: service_healthy
+  order-service:
+    build: ./order-service/
+    networks:
+      - back
+    restart: always
+    depends_on: 
+      config:
+        condition: service_healthy
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  gateway:
+    build: ./gateway/
+    networks:
+      - front
+      - back
+    ports:
+      - 8000:8000
+    restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on: 
+      config:
+        condition: service_healthy
+  zipkin:
+    image: openzipkin/zipkin
+    networks:
+      - back
+  fake-smtp:
+    image: dthibau/fake-smtp:1.0
+    networks:
+      - back
+  zookeeper:
+    image: 'wurstmeister/zookeeper:latest'
+    ports:
+      - '2181:2181'
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      - back
+  kafka:
+    image: 'wurstmeister/kafka'
+    ports:
+      - '9092:9092'
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      ALLOW_PLAINTEXT_LISTENER: 'yes'
+    networks:
+      - back
+
+
+networks:
+  back:
+  front:
