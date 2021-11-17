@@ -19,9 +19,11 @@ public class GatewayApplication {
 	public SecurityWebFilterChain securitygWebFilterChain(
 	  ServerHttpSecurity http) {
 	    return http.authorizeExchange()
+	    		.pathMatchers("/actuator/**").permitAll()
+	    		.pathMatchers("/auth/**").permitAll()
 	      .anyExchange().authenticated()
 	      .and().
-	      oauth2Login().and().build();
+	      oauth2ResourceServer(v -> v.jwt()).csrf().disable().build();
 	}
 }
 
