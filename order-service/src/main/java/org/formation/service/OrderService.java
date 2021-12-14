@@ -8,6 +8,7 @@ import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import jakarta.annotation.Resource;
 import lombok.extern.java.Log;
 
 @Service
@@ -18,25 +19,29 @@ public class OrderService {
 	private OrderRepository orderRepository;
 	
 	@Autowired
-	RestTemplate restTemplate;
-	
-	@Autowired
 	private CircuitBreakerFactory<?, ?> cbFactory;
+
+	@Resource
+	RestTemplate notificationClient;
 	
 	public Order processOrder(Order order ) {
 		
-		_sendMail(order);
-		return orderRepository.save(order);
+		order = orderRepository.save(order);
+		
+		Courriel c = Courriel.builder().to(order.getClient().getEmail())
+									.subject("Merci pour votre commande")
+									.text("Voici les conditions de retrait de la commande").build();
+		
+		log.info(_sendMail(c));
+		return order;
 	}
 	
-	private void _sendMail(Order order) {
-		
-		Courriel c = Courriel.builder().
-				         to(order.getClient().getEmail()).text("Féliciations pour votre nouvelle commande").subject("Nouvelle commande").build();
-		
-		String result = cbFactory.create("sendsimple").run(() -> restTemplate.postForObject("http://notification-service/sendSimple", c, String.class), throwable -> { System.out.println("FALLBACK"); return "fallback"; });
-		
-		log.info("Result form notification Service " + result);
 
+	private String _sendMail(Courriel c) {
+		
+		return cbFactory.create("sendMail").run(
+				() -> notificationClient.postForObject("/sendSimple", c, String.class),
+				throwable -> "FALLBACK : " + throwable);
 	}
+	
 }
