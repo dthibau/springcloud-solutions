@@ -1,3 +1,10 @@
+spring:
+  application:
+    name: delivery-service
+    
+server:
+  port: 3333
+
 management:
   endpoints:
     web:
@@ -14,7 +21,12 @@ management:
     health:
       show-details: always
 
-
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://annuaire:1111/eureka/
+  instance:
+    leaseRenewalIntervalInSeconds: 5   # DO NOT DO THIS IN PRODUCTION
 ---
 spring:
   config:
