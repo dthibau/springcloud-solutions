@@ -1,0 +1,6 @@
+version: '2.2'
+services:
+  fake-smtp:
+    image: dthibau/fake-smtp:1.0
+    ports:
+      - 2525:2525
