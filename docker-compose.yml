@@ -3,7 +3,7 @@ services:
   config:
     build: ./config/
     healthcheck:
-        test: curl -f http://localhost:8888/proxy/default && echo 'cool, it works'
+        test: curl -f http://localhost:8888/gateway/default && echo 'cool, it works'
         interval: 10s
         timeout: 10s
         retries: 5
