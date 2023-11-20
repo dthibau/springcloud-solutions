@@ -9,7 +9,10 @@ notification:
 
 ---
 spring:
-  profiles: replica
+  config:
+    activate:
+      on-profile:
+      - replica
     
 server:
   port: 9091

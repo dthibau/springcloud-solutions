@@ -6,9 +6,9 @@ spring:
       uri: http://config:8888
       fail-fast: true
 
-    loadbalancer:
-      ribbon:
-        enabled: false
+#    loadbalancer:
+#      ribbon:
+#        enabled: false
         
 
    

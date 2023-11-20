@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import lombok.extern.java.Log;
+
 @Service
+@Log
 public class OrderService {
 
 	@Autowired
@@ -27,6 +30,9 @@ public class OrderService {
 		Courriel c = Courriel.builder().
 				         to(order.getClient().getEmail()).text("Féliciations pour votre nouvelle commande").subject("Nouvelle commande").build();
 		
-		restTemplate.postForObject("http://notification-service/sendSimple", c, String.class); 
+		String result = restTemplate.postForObject("http://notification-service/sendSimple", c, String.class); 
+	
+		log.info("Result form notification Service " + result);
+	
 	}
 }

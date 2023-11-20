@@ -3,10 +3,10 @@ server:
 
 spring:
   jpa:
-    show-sql: true
+    show-sql: false
     
     
-spring.cloud.loadbalancer.ribbon.enabled: false
+#spring.cloud.loadbalancer.ribbon.enabled: false
 
 management.health.circuitbreakers.enabled: true
 management.health.ratelimiters.enabled: true
