@@ -1,7 +1,8 @@
 spring:
   application:
     name: delivery-service
-
+  jpa:
+    show-sql: true
   cloud:
     config:
       uri:
