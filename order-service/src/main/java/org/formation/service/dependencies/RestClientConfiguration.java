@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
-public class ClientConfiguration {
+public class RestClientConfiguration {
 	
 	@Autowired
 	RestTemplateBuilder builder;
@@ -17,5 +17,11 @@ public class ClientConfiguration {
 	@LoadBalanced
 	RestTemplate notificationClient() {
 		return builder.rootUri("http://notification-service").build();
+	}
+	
+	@Bean
+	@LoadBalanced
+	RestTemplate deliveryClient() {
+		return builder.rootUri("http://delivery-service").build();
 	}
 }
