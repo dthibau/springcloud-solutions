@@ -11,13 +11,7 @@ import org.formation.repository.AccountRepository;
 import org.formation.repository.Role;
 import org.formation.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import lombok.extern.java.Log;
 
@@ -71,7 +65,7 @@ public class AccountsController {
 	 * @return A non-null, non-empty set of Members.
 	 * @throws MemberNotFoundException If there are no matches at all.
 	 */
-	@RequestMapping("/search/{name}")
+	@GetMapping("/search/{name}")
 	public List<Account> byOwner(@PathVariable("name") String partialName) {
 		logger.info(
 				"Members-service byOwner() invoked: " + accountRepository.getClass().getName() + " for " + partialName);
@@ -87,7 +81,7 @@ public class AccountsController {
 
 	}
 
-	@RequestMapping(path = "/authenticate", method = RequestMethod.POST)
+	@PostMapping("/authenticate")
 	public Account authenticate(@Valid @RequestBody User user) {
 		logger.info("Members-service authenticate() invoked: " + user);
 		Account member = accountRepository.findByEmailAndPassword(user.getEmail(), user.getPassword());
@@ -99,7 +93,7 @@ public class AccountsController {
 		}
 	}
 
-	@RequestMapping(path = "/register", method = RequestMethod.POST)
+	@PostMapping("/register")
 	public Account register(@Valid @RequestBody Account account) {
 		if (account.getRoles().isEmpty()) {
 			account.addRole(roleRepository.findByName(Role.CUSTOMER));
