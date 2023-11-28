@@ -16,12 +16,13 @@ public class GatewayApplication {
 	}
 
 	@Bean
-	public SecurityWebFilterChain securitygWebFilterChain(
+	public SecurityWebFilterChain securityWebFilterChain(
 	  ServerHttpSecurity http) {
 	    return http.authorizeExchange()
 	      .anyExchange().authenticated()
 	      .and().
-	      oauth2Login().and().build();
+	      oauth2Login()
+	      .and().csrf().disable().build();
 	}
 }
 
