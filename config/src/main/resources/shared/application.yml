@@ -28,6 +28,9 @@ management:
       show-details: always
     gateway:
       enabled: true    
+  tracing:
+    sampling:
+      probability: 1.0    
 
 logging:
   level:
